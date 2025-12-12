@@ -2,8 +2,8 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 const isProtedtedRoute = createRouteMatcher([
-  "/my-events(.*)",
-  "/create-event(.*)",
+  "my-events(.*)",
+  "create-event(.*)",
   "my-tickets(.*)",
 ])
 
