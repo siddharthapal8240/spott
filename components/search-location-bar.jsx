@@ -4,9 +4,9 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Search, MapPin, Calendar, Loader2 } from "lucide-react";
-import { State, City } from "country-state-city";
+// import { State, City } from "country-state-city";
 import { format } from "date-fns";
-import { useConvexQuery, useConvexMutation } from "@/hooks/use-convex-query";
+import { useConvexQuery, useConvexMutation } from "@/convex/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { createLocationSlug } from "@/lib/location-utils";
 import { getCategoryIcon } from "@/lib/data";

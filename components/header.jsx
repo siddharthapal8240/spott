@@ -6,13 +6,13 @@ import { Building, Crown, Plus, Sparkles, Ticket } from "lucide-react";
 import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { BarLoader } from "react-spinners";
-import { useStoreUser } from "@/hooks/use-store-user";
-import { useOnboarding } from "@/hooks/use-onboarding";
+import { useStoreUser } from "@/convex/hooks/use-store-user";
+import { useOnboarding } from "@/convex/hooks/use-onboarding";
 import OnboardingModal from "./onboarding-modal";
-// import SearchLocationBar from "./search-location-bar";
+import SearchLocationBar from "./search-location-bar";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-// import UpgradeModal from "./upgrade-modal";
+import UpgradeModal from "./upgrade-modal";
 import { Badge } from "./ui/badge";
 
 export default function Header() {
@@ -131,11 +131,11 @@ export default function Header() {
         onComplete={handleOnboardingComplete}
       />
 
-      <UpgradeModal
+      {/* <UpgradeModal
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
         trigger="header"
-      />
+      /> */}
     </>
   );
 }
