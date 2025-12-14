@@ -32,7 +32,7 @@ export default function LandingPage() {
             </p>
 
             <Link href="/explore">
-              <Button size="xl" className={"rounded-full"}>
+              <Button size="lg" className="rounded-full w-full sm:w-auto">
                 Get Started
               </Button>
             </Link>
@@ -41,8 +41,8 @@ export default function LandingPage() {
           {/* Right - 3D Phone Mockup */}
           <div className="relative block">
             <Image
-              src="/hero.png"
-              // src="/hero.gif"
+              // src="/hero.png"
+              src="/hero.gif"
               alt="react meetup"
               width={700}
               height={700}
