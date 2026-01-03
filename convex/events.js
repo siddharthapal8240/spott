@@ -26,11 +26,19 @@ export const createEvent = mutation({
     hasPro: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
+    // 1. Separate 'hasPro' from the rest of the arguments
+    // 'restArgs' will contain everything EXCEPT 'hasPro'
+    const { hasPro: hasProArg, ...restArgs } = args;
+    const hasPro = hasProArg ?? false;
+
     try {
       const user = await ctx.runQuery(internal.users.getCurrentUser);
+      if (!user) {
+        throw new Error("User not found");
+      }
 
       // SERVER-SIDE CHECK: Verify event limit for Free users
-      if (!hasPro && user.freeEventsCreated >= 1) {
+      if (!hasPro && (user.freeEventsCreated || 0) >= 1) {
         throw new Error(
           "Free event limit reached. Please upgrade to Pro to create more events."
         );
@@ -45,7 +53,7 @@ export const createEvent = mutation({
       }
 
       // Force default color for Free users
-      const themeColor = hasPro ? args.themeColor : defaultColor;
+      const themeColor = hasPro ? args.themeColor : (args.themeColor || defaultColor);
 
       // Generate slug from title
       const slug = args.title
@@ -53,10 +61,10 @@ export const createEvent = mutation({
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
 
-      // Create event
+      // 2. Create event using 'restArgs' so we don't pass 'hasPro' into the DB
       const eventId = await ctx.db.insert("events", {
-        ...args,
-        themeColor, // Use validated color
+        ...restArgs, // Spread only valid schema fields
+        themeColor,  // Overwrite with validated color
         slug: `${slug}-${Date.now()}`,
         organizerId: user._id,
         organizerName: user.name,
@@ -67,7 +75,7 @@ export const createEvent = mutation({
 
       // Update user's free event count
       await ctx.db.patch(user._id, {
-        freeEventsCreated: user.freeEventsCreated + 1,
+        freeEventsCreated: (user.freeEventsCreated || 0) + 1,
       });
 
       return eventId;
@@ -94,6 +102,7 @@ export const getEventBySlug = query({
 export const getMyEvents = query({
   handler: async (ctx) => {
     const user = await ctx.runQuery(internal.users.getCurrentUser);
+    if (!user) return [];
 
     const events = await ctx.db
       .query("events")
@@ -110,6 +119,7 @@ export const deleteEvent = mutation({
   args: { eventId: v.id("events") },
   handler: async (ctx, args) => {
     const user = await ctx.runQuery(internal.users.getCurrentUser);
+    if (!user) throw new Error("Unauthorized");
 
     const event = await ctx.db.get(args.eventId);
     if (!event) {
