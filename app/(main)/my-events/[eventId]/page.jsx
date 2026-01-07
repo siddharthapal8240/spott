@@ -215,17 +215,28 @@ export default function EventDashboardPage() {
         </div>
 
         {/* Quick Actions - Show QR Scanner if event is today */}
-        {stats.isEventToday && !stats.isEventPast && (
+        <div className="mb-8">
           <Button
             size="lg"
-            // variant="outline"
-            className="mb-8 w-full gap-2 h-10 bg-linear-to-r from-orange-500 via-pink-500 to-red-500 text-white hover:scale-[1.02]"
+            disabled={!stats.isEventToday}
+            className="w-full gap-2 h-10 bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 text-white hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             onClick={() => setShowQRScanner(true)}
           >
             <QrCode className="w-6 h-6" />
             Scan QR Code to Check-In
           </Button>
-        )}
+
+          {/* Conditional Helper Text */}
+          {stats.isEventPast ? (
+            <p className="text-sm text-center text-muted-foreground mt-2">
+              This event has ended. Scanning is disabled.
+            </p>
+          ) : !stats.isEventToday ? (
+            <p className="text-sm text-center text-muted-foreground mt-2">
+              Scan option will be enabled on the day of the event.
+            </p>
+          ) : null}
+        </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
