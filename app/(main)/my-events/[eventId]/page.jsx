@@ -201,7 +201,7 @@ export default function EventDashboardPage() {
               <Eye className="w-4 h-4" />
               View
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               size="sm"
               onClick={handleDelete}
@@ -210,7 +210,7 @@ export default function EventDashboardPage() {
             >
               <Trash2 className="w-4 h-4" />
               {isDeleting ? "Deleting..." : "Delete"}
-            </Button>
+            </Button> */}
           </div>
         </div>
 
